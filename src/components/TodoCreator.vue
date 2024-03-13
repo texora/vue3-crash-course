@@ -3,35 +3,32 @@ import { reactive } from "vue";
 
 const emit = defineEmits(["create-todo"]);
 
-const todoState = reactive({
+const todo = reactive({
   todo: "",
   invalid: false,
   errMsg: "",
 });
 
 const createTodo = () => {
-  todoState.invalid = false;
-
-  if (todoState.todo !== "") {
-    emit("create-todo", todoState.todo);
-    todoState.todo = "";
-
+  todo.invalid = false;
+  if (todo.todo !== "") {
+    emit("create-todo", todo.todo);
+    todo.todo = "";
     return;
   }
-
-  todoState.invalid = true;
-  todoState.errMsg = "Todo value cannot be empty!";
+  todo.invalid = true;
+  todo.errMsg = "Todo value cannot be empty!";
 };
 </script>
 
 <template>
-  <div class="input-wrap" :class="{ 'input-err': todoState.invalid }" >
-    <input type="text" v-model="todoState.todo" />
+  <div class="input-wrap" :class="{ 'input-err': todo.invalid }">
+    <input type="text" v-model="todo.todo" />
     <button @click="createTodo()">
       <slot name="button-content"> Create </slot>
     </button>
   </div>
-  <p class="err-msg" v-if="todoState.invalid">{{ todoState.errMsg }}</p>
+  <p class="err-msg" v-if="todo.invalid">{{ todo.errMsg }}</p>
 </template>
 
 <style lang="scss" scoped>

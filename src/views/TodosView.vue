@@ -1,10 +1,15 @@
 <script setup>
-import { ref } from "vue";
+import { Icon } from "@iconify/vue";
 import { uid } from "uid";
+import { ref, computed } from "vue";
 import TodoCreator from "../components/TodoCreator.vue";
 import TodoItem from "../components/TodoItem.vue";
 
 const todoList = ref([]);
+
+const todosCompleted = computed(() => {
+  return todoList.value.every((todo) => todo.isCompleted);
+});
 
 const fetchTodoList = () => {
   const savedTodoList = JSON.parse(localStorage.getItem("todoList"));
@@ -56,7 +61,9 @@ const deleteTodo = (todo) => {
 <template>
   <main>
     <h1>Create Todo</h1>
-    <TodoCreator @create-todo="createTodo" />
+    <TodoCreator @create-todo="createTodo">
+      <template #button-content>Create</template>
+    </TodoCreator>
     <ul class="todo-list" v-if="todoList.length > 0">
       <TodoItem
         v-for="(todo, index) in todoList"
@@ -71,6 +78,10 @@ const deleteTodo = (todo) => {
     <p v-else class="todos-msg">
       <Icon icon="noto-v1:sad-but-relieved-face" />
       <span>You have no todo's to complete! Add one!</span>
+    </p>
+    <p v-if="todosCompleted && todoList.length > 0" class="todos-msg">
+      <Icon icon="noto-v1:party-popper" />
+      <span>You have completed all your todos!</span>
     </p>
   </main>
 </template>

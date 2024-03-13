@@ -11,14 +11,14 @@ const props = defineProps({
   },
 });
 
-defineEmits(["edit-todo", "update-todo", "toggle-complete"]);
+defineEmits(["edit-todo", "update-todo", "toggle-complete", "delete-todo"]);
 </script>
 
 <template>
   <li>
     <input
       type="checkbox"
-      :isChecked="todo.isCompleted"
+      :checked="todo.isCompleted"
       @input="$emit('toggle-complete', index)"
     />
     <div class="todo">
@@ -28,7 +28,12 @@ defineEmits(["edit-todo", "update-todo", "toggle-complete"]);
         :value="todo.todo"
         @input="$emit('update-todo', $event.target.value, index)"
       />
-      <span v-else>
+      <span
+        v-else
+        :class="{
+          'completed-todo': todo.isCompleted,
+        }"
+      >
         {{ todo.todo }}
       </span>
     </div>
